@@ -1,5 +1,5 @@
 ## What Jira issue is your PR related to?
-_e.g. [TBL-123](https://studyportals.atlassian.net/browse/TBL-123)_
+_e.g. TBL-123, autolinking should create the link for you, otherwise use the `Request GitHub Autolink` workflow in #platform-operations-public._
 
 ## What change(s) does your PR add?
 ...
