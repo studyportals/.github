@@ -60,15 +60,15 @@ jobs:
         token: ${{ secrets.token }}
         format: csv
         extensions: ".php"
-      if: ${{ inputs.validate-php == 'true' }}
+      if: inputs.validate-php
     - uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
-      if: ${{ inputs.validate-js == 'true' || inputs.validate-ts == 'true' }}
+      if: inputs.validate-js || inputs.validate-ts
     - uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ inputs.php-version }}
-      if: ${{ inputs.validate-php == 'true' }}
+      if: inputs.validate-php
     - run: npm ci @studyportals/code-style@$(jq -r '.devDependencies."@studyportals/code-style"' package.json) --no-save
     # - run: |
     #     composer validate
@@ -76,14 +76,19 @@ jobs:
     # - run: |
     #     npm run configure
     #     composer install
-    - run: composer require --dev phpmd/phpmd:$(jq -r '.require-dev."phpmd/phpmd"' composer.json)
-      if: ${{ inputs.validate-php == 'true' }}
+    - run: |
+        composer config github-oauth.github.com ${{ secrets.token }}
+        npm run configure || true
+        composer require --dev phpmd/phpmd:$(jq -r '."require-dev"."phpmd/phpmd"' composer.json)
+      env:
+        GITHUB_TOKEN: ${{ secrets.token }}
+      if: inputs.validate-php
     - run: |
         if [ ! -z "${{ steps.files.outputs.added_modified_renamed }}" ]; then
           echo "linting changed files..."
           ./vendor/bin/phpmd ${{ steps.files.outputs.added_modified_renamed }} text phpmd.xml
         fi
-      if: ${{ inputs.validate-php == 'true' }}
+      if: inputs.validate-php
     - uses: super-linter/super-linter/slim@v6
       env:
         VALIDATE_ALL_CODEBASE: false

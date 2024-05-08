@@ -34,7 +34,7 @@ jobs:
         aws-access-key-id: ${{ secrets.aws-access-key-id }}
         aws-region: ${{ inputs.aws-region }}
         aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
-    - uses: docker://studyportals/goldeneye:${{ inputs.tag }}
+    - uses: docker://studyportals/goldeneye:latest
       with:
         descriptor: ${{ inputs.descriptor }}
       env:
