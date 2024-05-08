@@ -1,0 +1,96 @@
+name: Lint Code Base
+
+on:
+  workflow_call:
+    inputs:
+      default-branch:
+        required: true
+        type: string
+      config-file-stylelint:
+        required: false
+        default: .stylelintrc.json
+        type: string
+      config-file-eslint:
+        required: false
+        default: .eslintrc.yml
+        type: string
+      config-file-phpcs:
+        required: false
+        default: phpcs.xml
+        type: string
+      node-version:
+        required: false
+        default: "20"
+        type: string
+      php-version:
+        required: false
+        default: "7.4"
+        type: string
+      validate-css:
+        required: false
+        default: true
+        type: boolean
+      validate-js:
+        required: false
+        default: true
+        type: boolean
+      validate-ts:
+        required: false
+        default: true
+        type: boolean
+      validate-php:
+        required: false
+        default: true
+        type: boolean
+    secrets:
+      token:
+        required: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - id: files
+      uses: studyportals/get-changed-files@main
+      with:
+        token: ${{ secrets.token }}
+        format: csv
+        extensions: ".php"
+      if: ${{ inputs.validate-php == 'true' }}
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+      if: ${{ inputs.validate-js == 'true' || inputs.validate-ts == 'true' }}
+    - uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ inputs.php-version }}
+      if: ${{ inputs.validate-php == 'true' }}
+    - run: npm ci @studyportals/code-style@$(jq -r '.devDependencies."@studyportals/code-style"' package.json) --no-save
+    # - run: |
+    #     composer validate
+    #     composer config github-oauth.github.com ${{ secrets.token }}
+    # - run: |
+    #     npm run configure
+    #     composer install
+    - run: composer require --dev phpmd/phpmd:$(jq -r '.require-dev."phpmd/phpmd"' composer.json)
+      if: ${{ inputs.validate-php == 'true' }}
+    - run: |
+        if [ ! -z "${{ steps.files.outputs.added_modified_renamed }}" ]; then
+          echo "linting changed files..."
+          ./vendor/bin/phpmd ${{ steps.files.outputs.added_modified_renamed }} text phpmd.xml
+        fi
+      if: ${{ inputs.validate-php == 'true' }}
+    - uses: super-linter/super-linter/slim@v6
+      env:
+        VALIDATE_ALL_CODEBASE: false
+        DEFAULT_BRANCH: ${{ inputs.default-branch }}
+        GITHUB_TOKEN: ${{ secrets.token }}
+        CSS_FILE_NAME: ${{ inputs.config-file-stylelint }}
+        JAVASCRIPT_ES_CONFIG_FILE: ${{ inputs.config-file-eslint }}
+        TYPESCRIPT_ES_CONFIG_FILE: ${{ inputs.config-file-eslint }}
+        PHP_PHPCS_FILE_NAME: ${{ inputs.config-file-phpcs }}
+

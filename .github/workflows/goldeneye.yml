@@ -1,0 +1,42 @@
+name: GoldenEye
+
+on:
+  workflow_call:
+    inputs:
+      aws-region:
+        required: false
+        default: eu-central-1
+        type: string
+      descriptor:
+        required: false
+        default: 'goldeneye.json'
+        type: string
+      tag:
+        required: false
+        default: latest
+        type: string
+    secrets:
+      aws-access-key-id:
+        required: true
+      aws-secret-access-key:
+        required: true
+      token:
+        required: true
+
+jobs:
+  cicd:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    steps:
+    - uses: actions/checkout@v4
+    - uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.aws-access-key-id }}
+        aws-region: ${{ inputs.aws-region }}
+        aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
+    - uses: docker://studyportals/goldeneye:${{ inputs.tag }}
+      with:
+        descriptor: ${{ inputs.descriptor }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.token }}
+

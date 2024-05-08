@@ -1,0 +1,38 @@
+name: Stale
+
+on:
+  schedule:
+  - cron: '0 5 */14 * *'
+  workflow_call:
+    inputs:
+      days-before-close:
+        required: false
+        default: 42
+        type: number
+      days-before-stale:
+        required: false
+        default: 14
+        type: number
+      label:
+        required: false
+        default: stale
+        type: string
+      message:
+        required: false
+        default: >
+          This pull request has been marked as stale because it has not had
+          recent activity. It will be closed if no further activity occurs.
+        type: string
+
+jobs:
+  stale:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/stale@v9
+        with:
+          days-before-pr-close: ${{ inputs.days-before-close }}
+          days-before-pr-stale: ${{ inputs.days-before-stale }}
+          stale-pr-label: ${{ inputs.label }}
+          stale-pr-message: ${{ inputs.message }}
+
