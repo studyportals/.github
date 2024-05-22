@@ -91,12 +91,19 @@ jobs:
       if: inputs.validate-php
     - uses: super-linter/super-linter/slim@v6
       env:
-        VALIDATE_ALL_CODEBASE: false
         DEFAULT_BRANCH: ${{ inputs.default-branch }}
         GITHUB_TOKEN: ${{ secrets.token }}
         LINTER_RULES_PATH: /
         CSS_FILE_NAME: ${{ inputs.config-file-stylelint }}
         JAVASCRIPT_ES_CONFIG_FILE: ${{ inputs.config-file-eslint }}
-        TYPESCRIPT_ES_CONFIG_FILE: ${{ inputs.config-file-eslint }}
         PHP_PHPCS_FILE_NAME: ${{ inputs.config-file-phpcs }}
+        TYPESCRIPT_ES_CONFIG_FILE: ${{ inputs.config-file-eslint }}
+        VALIDATE_ALL_CODEBASE: false
+        VALIDATE_CSS: ${{ inputs.validate-css }}
+        VALIDATE_JAVASCRIPT_ES: ${{ inputs.validate-js }}
+        VALIDATE_PHP: ${{ inputs.validate-php }}
+        VALIDATE_PHP_BUILTIN: ${{ inputs.validate-php }}
+        VALIDATE_PHP_PHPCS: ${{ inputs.validate-php }}
+        VALIDATE_PHP_PHPSTAN: ${{ inputs.validate-php }}
+        VALIDATE_TYPESCRIPT_ES: ${{ inputs.validate-ts }}
 
