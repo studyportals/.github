@@ -94,6 +94,7 @@ jobs:
         VALIDATE_ALL_CODEBASE: false
         DEFAULT_BRANCH: ${{ inputs.default-branch }}
         GITHUB_TOKEN: ${{ secrets.token }}
+        LINTER_RULES_PATH: /
         CSS_FILE_NAME: ${{ inputs.config-file-stylelint }}
         JAVASCRIPT_ES_CONFIG_FILE: ${{ inputs.config-file-eslint }}
         TYPESCRIPT_ES_CONFIG_FILE: ${{ inputs.config-file-eslint }}
