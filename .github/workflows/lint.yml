@@ -3,21 +3,6 @@ name: Reusable Linting
 on:
   workflow_call:
     inputs:
-      default-branch:
-        required: true
-        type: string
-      config-file-stylelint:
-        required: false
-        default: .stylelintrc.json
-        type: string
-      config-file-eslint:
-        required: false
-        default: .eslintrc.yml
-        type: string
-      config-file-phpcs:
-        required: false
-        default: phpcs.xml
-        type: string
       node-version:
         required: false
         default: "20"
@@ -26,21 +11,9 @@ on:
         required: false
         default: "7.4"
         type: string
-      validate-css:
+      validate-php-phpmd:
         required: false
-        default: true
-        type: boolean
-      validate-js:
-        required: false
-        default: true
-        type: boolean
-      validate-ts:
-        required: false
-        default: true
-        type: boolean
-      validate-php:
-        required: false
-        default: true
+        default: false
         type: boolean
     secrets:
       token:
@@ -61,15 +34,14 @@ jobs:
         token: ${{ secrets.token }}
         format: csv
         extensions: ".php"
-      if: inputs.validate-php
+      if: inputs.validate-php-phpmd
     - uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
-      if: inputs.validate-js || inputs.validate-ts
     - uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ inputs.php-version }}
-      if: inputs.validate-php
+      if: inputs.validate-php-phpmd
     - run: npm ci @studyportals/code-style@$(jq -r '.devDependencies."@studyportals/code-style"' package.json) --no-save
     - run: |
         composer config github-oauth.github.com ${{ secrets.token }}
@@ -77,50 +49,15 @@ jobs:
         composer require --dev phpmd/phpmd:$(jq -r '."require-dev"."phpmd/phpmd"' composer.json)
       env:
         GITHUB_TOKEN: ${{ secrets.token }}
-      if: inputs.validate-php
+      if: inputs.validate-php-phpmd
     - run: |
         if [ ! -z "${{ steps.files.outputs.added_modified_renamed }}" ]; then
           echo "linting changed files..."
           ./vendor/bin/phpmd ${{ steps.files.outputs.added_modified_renamed }} text phpmd.xml
         fi
-      if: inputs.validate-php
+      if: inputs.validate-php-phpmd
+    - run: cat .github/super-linter.env >> "$GITHUB_ENV"
     - uses: super-linter/super-linter/slim@v6
       if: inputs.validate-css
       env:
-        DEFAULT_BRANCH: ${{ inputs.default-branch }}
         GITHUB_TOKEN: ${{ secrets.token }}
-        LINTER_RULES_PATH: /
-        CSS_FILE_NAME: ${{ inputs.config-file-stylelint }}
-        VALIDATE_ALL_CODEBASE: false
-        VALIDATE_CSS: ${{ inputs.validate-css }}
-    - uses: super-linter/super-linter/slim@v6
-      if: inputs.validate-js
-      env:
-        DEFAULT_BRANCH: ${{ inputs.default-branch }}
-        GITHUB_TOKEN: ${{ secrets.token }}
-        LINTER_RULES_PATH: /
-        JAVASCRIPT_ES_CONFIG_FILE: ${{ inputs.config-file-eslint }}
-        VALIDATE_ALL_CODEBASE: false
-        VALIDATE_JAVASCRIPT_ES: ${{ inputs.validate-js }}
-    - uses: super-linter/super-linter/slim@v6
-      if: inputs.validate-php
-      env:
-        DEFAULT_BRANCH: ${{ inputs.default-branch }}
-        GITHUB_TOKEN: ${{ secrets.token }}
-        LINTER_RULES_PATH: /
-        PHP_PHPCS_FILE_NAME: ${{ inputs.config-file-phpcs }}
-        VALIDATE_ALL_CODEBASE: false
-        VALIDATE_PHP: ${{ inputs.validate-php }}
-        VALIDATE_PHP_BUILTIN: ${{ inputs.validate-php }}
-        VALIDATE_PHP_PHPCS: ${{ inputs.validate-php }}
-        VALIDATE_PHP_PHPSTAN: ${{ inputs.validate-php }}
-    - uses: super-linter/super-linter/slim@v6
-      if: inputs.validate-ts
-      env:
-        DEFAULT_BRANCH: ${{ inputs.default-branch }}
-        GITHUB_TOKEN: ${{ secrets.token }}
-        LINTER_RULES_PATH: /
-        TYPESCRIPT_ES_CONFIG_FILE: ${{ inputs.config-file-eslint }}
-        VALIDATE_ALL_CODEBASE: false
-        VALIDATE_TYPESCRIPT_ES: ${{ inputs.validate-ts }}
-
