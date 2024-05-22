@@ -58,6 +58,5 @@ jobs:
       if: inputs.validate-php-phpmd
     - run: cat .github/super-linter.env >> "$GITHUB_ENV"
     - uses: super-linter/super-linter/slim@v6
-      if: inputs.validate-css
       env:
         GITHUB_TOKEN: ${{ secrets.token }}
