@@ -1,4 +1,4 @@
-name: GoldenEye
+name: Reusable GoldenEye
 
 on:
   workflow_call:
@@ -24,8 +24,9 @@ on:
         required: true
 
 jobs:
-  cicd:
+  execute:
     runs-on: ubuntu-22.04
+    name: Execute
     timeout-minutes: 30
     steps:
     - uses: actions/checkout@v4

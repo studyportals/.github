@@ -1,8 +1,6 @@
-name: Stale
+name: Reusable Stale
 
 on:
-  schedule:
-  - cron: '0 5 */14 * *'
   workflow_call:
     inputs:
       days-before-close:
@@ -25,8 +23,9 @@ on:
         type: string
 
 jobs:
-  stale:
+  execute:
     runs-on: ubuntu-22.04
+    name: Execute
     timeout-minutes: 30
     steps:
       - uses: actions/stale@v9

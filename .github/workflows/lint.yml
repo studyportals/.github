@@ -1,4 +1,4 @@
-name: Lint Code Base
+name: Reusable Linting
 
 on:
   workflow_call:
@@ -47,8 +47,9 @@ on:
         required: true
 
 jobs:
-  lint:
+  execute:
     runs-on: ubuntu-22.04
+    name: Execute
     timeout-minutes: 30
     steps:
     - uses: actions/checkout@v4
@@ -70,12 +71,6 @@ jobs:
         php-version: ${{ inputs.php-version }}
       if: inputs.validate-php
     - run: npm ci @studyportals/code-style@$(jq -r '.devDependencies."@studyportals/code-style"' package.json) --no-save
-    # - run: |
-    #     composer validate
-    #     composer config github-oauth.github.com ${{ secrets.token }}
-    # - run: |
-    #     npm run configure
-    #     composer install
     - run: |
         composer config github-oauth.github.com ${{ secrets.token }}
         npm run configure || true
