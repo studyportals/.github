@@ -85,20 +85,42 @@ jobs:
         fi
       if: inputs.validate-php
     - uses: super-linter/super-linter/slim@v6
+      if: inputs.validate-css
       env:
         DEFAULT_BRANCH: ${{ inputs.default-branch }}
         GITHUB_TOKEN: ${{ secrets.token }}
         LINTER_RULES_PATH: /
         CSS_FILE_NAME: ${{ inputs.config-file-stylelint }}
-        JAVASCRIPT_ES_CONFIG_FILE: ${{ inputs.config-file-eslint }}
-        PHP_PHPCS_FILE_NAME: ${{ inputs.config-file-phpcs }}
-        TYPESCRIPT_ES_CONFIG_FILE: ${{ inputs.config-file-eslint }}
         VALIDATE_ALL_CODEBASE: false
         VALIDATE_CSS: ${{ inputs.validate-css }}
+    - uses: super-linter/super-linter/slim@v6
+      if: inputs.validate-js
+      env:
+        DEFAULT_BRANCH: ${{ inputs.default-branch }}
+        GITHUB_TOKEN: ${{ secrets.token }}
+        LINTER_RULES_PATH: /
+        JAVASCRIPT_ES_CONFIG_FILE: ${{ inputs.config-file-eslint }}
+        VALIDATE_ALL_CODEBASE: false
         VALIDATE_JAVASCRIPT_ES: ${{ inputs.validate-js }}
+    - uses: super-linter/super-linter/slim@v6
+      if: inputs.validate-php
+      env:
+        DEFAULT_BRANCH: ${{ inputs.default-branch }}
+        GITHUB_TOKEN: ${{ secrets.token }}
+        LINTER_RULES_PATH: /
+        PHP_PHPCS_FILE_NAME: ${{ inputs.config-file-phpcs }}
+        VALIDATE_ALL_CODEBASE: false
         VALIDATE_PHP: ${{ inputs.validate-php }}
         VALIDATE_PHP_BUILTIN: ${{ inputs.validate-php }}
         VALIDATE_PHP_PHPCS: ${{ inputs.validate-php }}
         VALIDATE_PHP_PHPSTAN: ${{ inputs.validate-php }}
+    - uses: super-linter/super-linter/slim@v6
+      if: inputs.validate-ts
+      env:
+        DEFAULT_BRANCH: ${{ inputs.default-branch }}
+        GITHUB_TOKEN: ${{ secrets.token }}
+        LINTER_RULES_PATH: /
+        TYPESCRIPT_ES_CONFIG_FILE: ${{ inputs.config-file-eslint }}
+        VALIDATE_ALL_CODEBASE: false
         VALIDATE_TYPESCRIPT_ES: ${{ inputs.validate-ts }}
 
