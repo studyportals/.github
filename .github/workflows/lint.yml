@@ -1,0 +1,62 @@
+name: Reusable Linting
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        required: false
+        default: "20"
+        type: string
+      php-version:
+        required: false
+        default: "7.4"
+        type: string
+      validate-php-phpmd:
+        required: false
+        default: false
+        type: boolean
+    secrets:
+      token:
+        required: true
+
+jobs:
+  execute:
+    runs-on: ubuntu-22.04
+    name: Execute
+    timeout-minutes: 30
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - id: files
+      uses: studyportals/get-changed-files@main
+      with:
+        token: ${{ secrets.token }}
+        format: csv
+        extensions: ".php"
+      if: inputs.validate-php-phpmd
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+    - uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ inputs.php-version }}
+      if: inputs.validate-php-phpmd
+    - run: npm ci @studyportals/code-style@$(jq -r '.devDependencies."@studyportals/code-style"' package.json) --no-save
+    - run: |
+        composer config github-oauth.github.com ${{ secrets.token }}
+        npm run configure || true
+        composer require --dev phpmd/phpmd:$(jq -r '."require-dev"."phpmd/phpmd"' composer.json)
+      env:
+        GITHUB_TOKEN: ${{ secrets.token }}
+      if: inputs.validate-php-phpmd
+    - run: |
+        if [ ! -z "${{ steps.files.outputs.added_modified_renamed }}" ]; then
+          echo "linting changed files..."
+          ./vendor/bin/phpmd ${{ steps.files.outputs.added_modified_renamed }} text phpmd.xml
+        fi
+      if: inputs.validate-php-phpmd
+    - run: cat .github/super-linter.env >> "$GITHUB_ENV"
+    - uses: super-linter/super-linter/slim@v6
+      env:
+        GITHUB_TOKEN: ${{ secrets.token }}
