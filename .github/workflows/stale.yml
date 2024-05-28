@@ -5,7 +5,7 @@ on:
     inputs:
       days-before-close:
         required: false
-        default: 42
+        default: 46
         type: number
       days-before-stale:
         required: false
