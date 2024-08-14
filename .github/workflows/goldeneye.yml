@@ -24,9 +24,9 @@ on:
         required: true
 
 jobs:
-  execute:
+  deploy:
     runs-on: ubuntu-22.04
-    name: Execute
+    name: Deploy
     timeout-minutes: 30
     steps:
     - uses: actions/checkout@v4
