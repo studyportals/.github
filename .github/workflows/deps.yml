@@ -1,0 +1,42 @@
+name: Reusable Dependency Check
+
+on:
+  workflow_call:
+    inputs:
+      comment-summary-in-pr:
+        required: true
+        default: "always"
+        type: string
+      vulnerability-check:
+        required: true
+        default: true
+        type: boolean
+      fail_on_severity:
+        required: true
+        default: "critical"
+        type: string
+      show-openssf-scorecard:
+        required: false
+        default: true
+        type: boolean
+      license-check:
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    name: "Dependency Review"
+    timeout-minutes: 30
+    steps:
+      - name: "Checkout Repository"
+        uses: actions/checkout@v4
+      - name: "Dependency Review"
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: ${{ inputs.fail_on_severity }}
+          comment-summary-in-pr: ${{ inputs.comment-summary-in-pr }}
+          vulnerability-check: ${{ inputs.vulnerability-check }}
+          show-openssf-scorecard: ${{ inputs.show-openssf-scorecard }}
+          license-check: ${{ inputs.license-check }}
