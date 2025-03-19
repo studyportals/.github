@@ -52,13 +52,25 @@ jobs:
     - run: npm ci @studyportals/code-style@$(jq -r '.devDependencies."@studyportals/code-style"' package.json) --no-save
     
     - run: |
-        # git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
-        # export COMPOSER_AUTH='{"github-oauth": {"github.com": "'${{ secrets.GITHUB_TOKEN }}'"}}'
+        # ✅ Force Git to use HTTPS authentication with `GITHUB_TOKEN`
+        git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
+
+        # ✅ Explicitly configure Composer to use GitHub OAuth
+        composer config --global --auth github-oauth.github.com "${{ secrets.GITHUB_TOKEN }}"
+
+        # ✅ Ensure Composer does NOT use SSH (force HTTPS)
+        composer config --global repositories.stdypt git "https://github.com/studyportals/domain-api.git"
+
+        # ✅ Clear Composer cache (to remove any old SSH attempts)
+        composer clear-cache
+
+        # ✅ Reinstall dependencies
         npm run configure || true
         composer require --dev phpmd/phpmd:$(jq -r '."require-dev"."phpmd/phpmd"' composer.json)
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       if: inputs.validate-php-phpmd
+
 
     - name: Read PHPMD version from composer.lock
       id: phpmd_version
