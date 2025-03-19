@@ -50,21 +50,31 @@ jobs:
 
     - run: npm ci @studyportals/code-style@$(jq -r '.devDependencies."@studyportals/code-style"' package.json) --no-save
     
-    - run: |
-        git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
-        export COMPOSER_AUTH='{"github-oauth": {"github.com": "'${{ secrets.GITHUB_TOKEN }}'"}}'
-        npm run configure || true
-        composer require --dev phpmd/phpmd:$(jq -r '."require-dev"."phpmd/phpmd"' composer.json)
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # - run: |
+    #     git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
+    #     export COMPOSER_AUTH='{"github-oauth": {"github.com": "'${{ secrets.GITHUB_TOKEN }}'"}}'
+    #     npm run configure || true
+    #     composer require --dev phpmd/phpmd:$(jq -r '."require-dev"."phpmd/phpmd"' composer.json)
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   if: inputs.validate-php-phpmd
+
+    - name: PHP Mess Detector
+      uses: php-actions/phpmd@v1
+      with:
+        version: $(jq -r '."require-dev"."phpmd/phpmd"' composer.json)
+        path: steps.files.outputs.added_modified_renamed
+        output: text
+        ruleset: phpmd.xml
       if: inputs.validate-php-phpmd
 
-    - run: |
-        if [ ! -z "${{ steps.files.outputs.added_modified_renamed }}" ]; then
-          echo "Linting changed files..."
-          ./vendor/bin/phpmd ${{ steps.files.outputs.added_modified_renamed }} text phpmd.xml
-        fi
-      if: inputs.validate-php-phpmd
+        
+    # - run: |
+    #     if [ ! -z "${{ steps.files.outputs.added_modified_renamed }}" ]; then
+    #       echo "Linting changed files..."
+    #       ./vendor/bin/phpmd ${{ steps.files.outputs.added_modified_renamed }} text phpmd.xml
+    #     fi
+    #   if: inputs.validate-php-phpmd
 
     - run: cat .github/super-linter.env >> "$GITHUB_ENV"
 
