@@ -15,13 +15,6 @@ on:
         required: false
         default: latest
         type: string
-    secrets:
-      aws-access-key-id:
-        required: true
-      aws-secret-access-key:
-        required: true
-      token:
-        required: true
 
 jobs:
   deploy:
