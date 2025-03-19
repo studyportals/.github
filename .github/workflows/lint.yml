@@ -59,10 +59,14 @@ jobs:
     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     #   if: inputs.validate-php-phpmd
 
+    - name: Read PHPMD version from composer.json
+        id: phpmd_version
+        run: echo "PHPMD_VERSION=$(jq -r '."require-dev"."phpmd/phpmd"' composer.json)" >> "$GITHUB_ENV"    
+
     - name: PHP Mess Detector
       uses: php-actions/phpmd@v1
       with:
-        version: $(jq -r '."require-dev"."phpmd/phpmd"' composer.json)
+        version: ${{ env.PHPMD_VERSION }}
         php_version: ${{ inputs.php-version }}
         path: steps.files.outputs.added_modified_renamed
         output: text
