@@ -51,11 +51,12 @@ jobs:
     - run: npm ci @studyportals/code-style@$(jq -r '.devDependencies."@studyportals/code-style"' package.json) --no-save
 
     - run: |
-        composer config github-oauth.github.com ${{ secrets.GITHUB_TOKEN }}
+        export COMPOSER_AUTH='{"github-oauth": {"github.com": "'${{ secrets.GITHUB_TOKEN }}'"}}'
         npm run configure || true
         composer require --dev phpmd/phpmd:$(jq -r '."require-dev"."phpmd/phpmd"' composer.json)
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       if: inputs.validate-php-phpmd
 
     - run: |
