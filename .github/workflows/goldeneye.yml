@@ -33,7 +33,7 @@ jobs:
       with:
         role-to-assume: arn:aws:iam::915473064509:role/GoldenEye-Github
         role-session-name: goldeneye-federation
-        aws-region: ${{ inputs.aws-region }}    
+        aws-region: ${{ inputs.aws-region }}
     - uses: docker://studyportals/goldeneye:latest
       with:
         descriptor: ${{ inputs.descriptor }}
