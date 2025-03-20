@@ -15,7 +15,13 @@ on:
         required: false
         default: latest
         type: string
-
+    secrets:
+      aws-access-key-id:
+        required: false
+      aws-secret-access-key:
+        required: false
+      token:
+        required: false
 jobs:
   deploy:
     runs-on: ubuntu-22.04
