@@ -5,7 +5,7 @@ on:
     inputs:
       aws-region:
         required: false
-        default: eu-central-1
+        default: eu-west-1
         type: string
       descriptor:
         required: false
@@ -15,29 +15,28 @@ on:
         required: false
         default: latest
         type: string
-    secrets:
-      aws-access-key-id:
-        required: true
-      aws-secret-access-key:
-        required: true
-      token:
-        required: true
 
 jobs:
   deploy:
     runs-on: ubuntu-22.04
+    permissions:
+      id-token: write
+      contents: read
+      issues: read
+      pull-requests: read
     name: Deploy
     timeout-minutes: 30
     steps:
     - uses: actions/checkout@v4
-    - uses: aws-actions/configure-aws-credentials@v1
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
       with:
-        aws-access-key-id: ${{ secrets.aws-access-key-id }}
+        role-to-assume: arn:aws:iam::915473064509:role/GoldenEye-Github
+        role-session-name: goldeneye-federation
         aws-region: ${{ inputs.aws-region }}
-        aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
     - uses: docker://studyportals/goldeneye:latest
       with:
         descriptor: ${{ inputs.descriptor }}
       env:
-        GITHUB_TOKEN: ${{ secrets.token }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
