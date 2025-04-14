@@ -58,7 +58,7 @@ jobs:
     - name: PHP Mess Detector
       uses: php-actions/phpmd@v1
       with:
-        version: ${{ env.PHPMD_VERSION }}
+        version: 2.8
         php_version: ${{ inputs.php-version }}
         path: ${{ steps.files.outputs.added_modified_renamed }}
         output: text
