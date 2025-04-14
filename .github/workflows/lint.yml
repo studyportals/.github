@@ -53,7 +53,7 @@ jobs:
     
     - name: Read PHPMD version from composer.lock
       id: phpmd_version
-      run: echo "PHPMD_VERSION=$(jq -r '.packages-dev[] | select(.name == "phpmd/phpmd") | .version' composer.lock)" >> "$GITHUB_ENV"
+      run: echo "PHPMD_VERSION=$(jq -r '."packages-dev"[] | select(.name == "phpmd/phpmd") | .version' composer.lock)" >> "$GITHUB_ENV"
 
     - name: PHP Mess Detector
       uses: php-actions/phpmd@v1
