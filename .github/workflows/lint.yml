@@ -53,12 +53,12 @@ jobs:
     
     - name: Read PHPMD version from composer.lock
       id: phpmd_version
-      run: echo "PHPMD_VERSION=$(jq -r '.packages[] | select(.name == "phpmd/phpmd") | .version' composer.lock)" >> "$GITHUB_ENV"
+      run: echo "PHPMD_VERSION=$(jq -r '.packages-dev[] | select(.name == "phpmd/phpmd") | .version' composer.lock)" >> "$GITHUB_ENV"
 
     - name: PHP Mess Detector
       uses: php-actions/phpmd@v1
       with:
-        version: 2.8.2
+        version: ${{ env.PHPMD_VERSION }}
         php_version: ${{ inputs.php-version }}
         path: ${{ steps.files.outputs.added_modified_renamed }}
         output: text
