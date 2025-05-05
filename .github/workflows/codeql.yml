@@ -37,7 +37,7 @@ jobs:
     strategy:
       fail-fast: ${{ inputs.fail-fast }}
       matrix:
-        language: ${{ fromJson('["' + inputs.languages.replace(',', '","') + '"]') }}
+        language: ${{ fromJson(inputs.languages) }}
 
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}-${{ matrix.language }}
