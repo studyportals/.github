@@ -4,27 +4,42 @@ on:
   workflow_call:
     inputs:
       languages:
-        description: "Languages to analyze (comma-separated, e.g., typescript,python)"
+        description: >
+          Languages to analyze, provided as a JSON array
+          (e.g., ["typescript", "python", "actions"]).
+          If your project includes both JavaScript and TypeScript,
+          specify only "typescript" to avoid duplicate analysis.
         required: false
-        default: "typescript"
+        default: '["typescript"]'
         type: string
+
       node-version:
-        description: "Node.js version"
+        description: >
+          Node.js version to use for JavaScript/TypeScript analysis.
+          Ignored for other languages.
         required: false
         default: "22"
         type: string
+
       python-version:
-        description: "Python version"
+        description: >
+          Python version to use for Python analysis.
+          Ignored for other languages.
         required: false
         default: "3.11"
         type: string
+
       fail-fast:
-        description: "Fail fast on matrix failures"
+        description: >
+          Whether to stop all matrix jobs if one fails.
         required: false
         default: true
         type: boolean
+
       codeql-queries:
-        description: "Additional CodeQL queries to run"
+        description: >
+          Additional CodeQL queries to run (comma-separated).
+          Example: "+security-and-quality,security-extended"
         required: false
         default: "+security-and-quality,security-extended"
         type: string
@@ -83,6 +98,7 @@ jobs:
           dependency-caching: true
 
       - name: Autobuild
+        if: matrix.language != 'actions'
         uses: github/codeql-action/autobuild@v3
 
       - name: Perform CodeQL Analysis
