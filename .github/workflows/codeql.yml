@@ -3,16 +3,6 @@ name: Reusable CodeQL Analysis
 on:
   workflow_call:
     inputs:
-      languages:
-        description: >
-          Languages to analyze, provided as a JSON array
-          (e.g., '["typescript", "python", "actions"]').
-          If your project includes both JavaScript and TypeScript,
-          specify only "typescript" to avoid duplicate analysis.
-        required: false
-        default: '["typescript"]'
-        type: string
-
       node-version:
         description: >
           Node.js version to use for JavaScript/TypeScript analysis.
@@ -44,24 +34,41 @@ on:
         default: "+security-and-quality,security-extended"
         type: string
 
-permissions:
-  contents: read
-  security-events: write
-  actions: read
-
 jobs:
+  create-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.languages }}
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - name: Get languages from repo
+        id: set-matrix
+        uses: advanced-security/set-codeql-language-matrix@v1
+        with:
+          access-token: ${{ secrets.GITHUB_TOKEN }}
+          endpoint: ${{ github.event.repository.languages_url }}
+
   codeql-analysis:
+    needs: create-matrix
+    if: ${{ needs.create-matrix.outputs.matrix != '[]' }}
     name: CodeQL
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: ${{ inputs.fail-fast }}
       matrix:
-        language: ${{ fromJson(inputs.languages) }}
+        language: ${{ fromJson(needs.create-matrix.outputs.matrix) }}
 
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}-${{ matrix.language }}
       cancel-in-progress: true
+
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
 
     steps:
       - name: Checkout repository
@@ -101,7 +108,7 @@ jobs:
         if: matrix.language != 'actions'
         uses: github/codeql-action/autobuild@v3
         with:
-          category: "/language:${{matrix.language}}"
+          category: "/language:${{ matrix.language }}"
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
