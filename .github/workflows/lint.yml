@@ -15,7 +15,9 @@ on:
         required: false
         default: false
         type: boolean
-
+    secrets:
+      token:
+        required: false
 permissions:
   contents: read
   packages: read
