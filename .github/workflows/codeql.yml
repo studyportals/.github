@@ -44,6 +44,11 @@ on:
         default: "+security-and-quality,security-extended"
         type: string
 
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
 jobs:
   codeql-analysis:
     name: CodeQL
@@ -57,12 +62,6 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}-${{ matrix.language }}
       cancel-in-progress: true
-
-    permissions:
-      security-events: write
-      packages: read
-      actions: read
-      contents: read
 
     steps:
       - name: Checkout repository
