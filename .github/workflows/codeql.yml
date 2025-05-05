@@ -1,0 +1,91 @@
+name: Reusable CodeQL Analysis
+
+on:
+  workflow_call:
+    inputs:
+      languages:
+        description: "Languages to analyze (comma-separated, e.g., typescript,python)"
+        required: false
+        default: "typescript"
+        type: string
+      node-version:
+        description: "Node.js version"
+        required: false
+        default: "22"
+        type: string
+      python-version:
+        description: "Python version"
+        required: false
+        default: "3.11"
+        type: string
+      fail-fast:
+        description: "Fail fast on matrix failures"
+        required: false
+        default: true
+        type: boolean
+      codeql-queries:
+        description: "Additional CodeQL queries to run"
+        required: false
+        default: "+security-and-quality,security-extended"
+        type: string
+
+jobs:
+  codeql-analysis:
+    name: CodeQL
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: ${{ inputs.fail-fast }}
+      matrix:
+        language: ${{ fromJson('["' + inputs.languages.replace(',', '","') + '"]') }}
+
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}-${{ matrix.language }}
+      cancel-in-progress: true
+
+    permissions:
+      security-events: write
+      packages: read
+      actions: read
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        if: matrix.language == 'javascript' || matrix.language == 'typescript'
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.node-version }}
+
+      - name: Install Node.js dependencies
+        if: matrix.language == 'javascript' || matrix.language == 'typescript'
+        run: npm ci
+
+      - name: Set up Python
+        if: matrix.language == 'python'
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ inputs.python-version }}
+
+      - name: Install Python dependencies
+        if: matrix.language == 'python'
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f python_requirements.txt ]; then pip install -r python_requirements.txt; fi
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: ${{ inputs.codeql-queries }}
+          dependency-caching: true
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: security
