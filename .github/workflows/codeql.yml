@@ -99,6 +99,8 @@ jobs:
       - name: Autobuild
         if: matrix.language != 'actions'
         uses: github/codeql-action/autobuild@v3
+        with:
+          category: "/language:${{matrix.language}}"
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
