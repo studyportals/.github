@@ -65,7 +65,7 @@ jobs:
         path: ${{ steps.files.outputs.added_modified_renamed }}
         output: text
         ruleset: phpmd.xml
-      if: inputs.validate-php-phpmd
+      if: inputs.validate-php-phpmd && steps.files.outputs.added_modified_renamed != ''
 
     - run: cat .github/super-linter.env >> "$GITHUB_ENV"
 
