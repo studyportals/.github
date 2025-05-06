@@ -115,6 +115,10 @@ jobs:
           category: security
           output: ./codeql-results
           upload: false
+      - name: Debug SARIF output files
+        run: |
+          echo "Debugging SARIF output files..."
+          find -type f -name "*.sarif" -exec echo "Found SARIF file: {}" \;
 
       - name: Check for CodeQL alerts
         run: |
