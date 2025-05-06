@@ -53,6 +53,10 @@ jobs:
 
     - run: npm ci @studyportals/code-style@$(jq -r '.devDependencies."@studyportals/code-style"' package.json) --no-save
     
+    - run: |
+        composer install --no-progress --prefer-dist --no-scripts
+      if: inputs.validate-php-phpmd
+
     - name: Read PHPMD version from composer.lock
       id: phpmd_version
       run: echo "PHPMD_VERSION=$(jq -r '."packages-dev"[] | select(.name == "phpmd/phpmd") | .version' composer.lock)" >> "$GITHUB_ENV"
