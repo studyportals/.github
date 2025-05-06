@@ -55,7 +55,6 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
-      fail-fast: ${{ inputs.fail-fast }}
       matrix:
         language: ${{ fromJson(inputs.languages) }}
 
