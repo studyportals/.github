@@ -114,3 +114,18 @@ jobs:
         uses: github/codeql-action/analyze@v3
         with:
           category: security
+          output: sarif-results
+
+      - name: Check for CodeQL alerts
+        run: |
+          set -e
+          echo "Checking SARIF results for any CodeQL alerts..."
+          count=$(jq '[.runs[].results[] | select(.rule.severity != null)] | length' sarif-results/codeql.sarif)
+          echo "Found $count alerts"
+          if [ "$count" -gt 0 ]; then
+            echo "❌ CodeQL alerts found! Failing the build."
+            exit 1
+          else
+            echo "✅ No CodeQL alerts found."
+          fi
+        shell: bash
