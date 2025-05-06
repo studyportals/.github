@@ -6,7 +6,7 @@ on:
       languages:
         description: >
           Languages to analyze, provided as a JSON array
-          (e.g., '["typescript", "python", "actions"]').
+          (e.g., '["typescript", "python"]').
           If your project includes both JavaScript and TypeScript,
           specify only "typescript" to avoid duplicate analysis.
         required: false
@@ -73,9 +73,16 @@ jobs:
         with:
           node-version: ${{ inputs.node-version }}
 
-      - name: Install Node.js dependencies
+      - name: Install Node.js dependencies (npm or yarn)
         if: matrix.language == 'javascript' || matrix.language == 'typescript'
-        run: npm ci
+        run: |
+          if [ -f package-lock.json ]; then
+            echo "Using npm ci"
+            npm ci
+          else
+            echo "Using yarn install"
+            yarn install --frozen-lockfile
+          fi
 
       - name: Set up Python
         if: matrix.language == 'python'
@@ -100,8 +107,6 @@ jobs:
       - name: Autobuild
         if: matrix.language != 'actions'
         uses: github/codeql-action/autobuild@v3
-        with:
-          category: "/language:${{matrix.language}}"
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
