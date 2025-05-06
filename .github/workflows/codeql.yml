@@ -80,8 +80,10 @@ jobs:
             echo "Using npm ci"
             npm ci
           else
-            echo "Using yarn install"
-            yarn install --frozen-lockfile
+            echo "No package-lock.json found. Using Yarn via Corepack..."
+            corepack enable
+            corepack prepare yarn@stable --activate
+            yarn install --immutable
           fi
 
       - name: Set up Python
