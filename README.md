@@ -33,10 +33,10 @@ and code quality issues using GitHub's CodeQL. It is triggered on `push` and
 The workflow uses a reusable GitHub Actions setup to run CodeQL analysis.
 You can customize the analysis by specifying the languages you want to analyze.
 
+
 ### 2. Dependency Scanning
 The **Dependency Scanning** workflow ensures that the project's dependencies
-are free of known vulnerabilities. It leverages tools such as
-[GitHub's Dependency Graph](https://docs.github.com/en/github/managing-security-vulnerabilities/about-the-dependency-graph) and [Dependabot](https://dependabot.com/).
+are free of known vulnerabilities. 
 
 - **Trigger:** `push` and `pull_request` events.
 - **Action:** Automatically checks for outdated dependencies or vulnerabilities in the dependency tree.
@@ -101,6 +101,26 @@ This repository is intended to be used as part of a larger project. To use the w
 ### CodeQL Analysis
 You can customize which languages are analyzed by modifying the `languages` input in the workflow file.
 You can also customize the CodeQL queries being run.
+
+NOTE: When adding the CodeQL workflow to a repository for the first time, the workflow might not
+report results. You may see the following message in the [checks](./images/CodeQLTroubleshooting.png)
+
+To resolve this issue, run the following commands in Git Bash:
+```bash
+gh api -H "Accept: application/vnd.github+json" ./repos/<OrganisationName>/<RepositoryName>/code-scanning/analyses --paginate |  jq '.[]|select(.category=="/language:actions") | .id ' |sed 's/\r//' | xargs -I {} gh api --method DELETE   -H "Accept: application/vnd.github+json"   -H "X-GitHub-Api-Version: 2022-11-28"   /repos/<OrganisationName>/<RepositoryName>/code-scanning/analyses/{}?confirm_delete
+
+gh api -H "Accept: application/vnd.github+json" ./repos/<OrganisationName>/<RepositoryName>/code-scanning/analyses --paginate |  jq '.[]|select(.category=="/language:javascript-typescript") | .id ' |sed 's/\r//' | xargs -I {} gh api --method DELETE   -H "Accept: application/vnd.github+json"   -H "X-GitHub-Api-Version: 2022-11-28"   /repos/<OrganisationName>/<RepositoryName>/code-scanning/analyses/{}?confirm_delete
+
+```
+Make sure to replace `<OrganisationName>` and `<RepositoryName>` with the actual names , and adjust the
+`category` value to match the one displayed in your repository's checks.
+
+**Important Notes:**
+* The CodeQL Analysis workflow itself will typically show as successful, even if vulnerabilities are detected.
+* A separate line item—`Code scanning results / CodeQL`—will display the actual results of the CodeQL scan.
+* By default, this check will only report a failure if high or critical severity issues are found.
+* You can customize this behavior to fail the check on any level of issue, including medium, low severity or warnings.
+* CodeQL errors and warnings are displayed directly on the pull request, along with GitHub Copilot suggestions to help fix the issue.
 
 ### Goldeneye
 You can customize which aws accounts, regions service names in the `goldeneye.json` input in the workflow file.
