@@ -73,6 +73,23 @@ jobs:
         with:
           node-version: ${{ inputs.node-version }}
 
+      - name: Detect file manager
+        if: matrix.language == 'javascript' || matrix.language == 'typescript'
+        id: dfm
+        shell: bash
+        run: |
+          if [ -f package-lock.json ]; then
+            echo "manager=npm" >> $GITHUB_OUTPUT
+            echo "manager_lock_file=package-lock.json" >> $GITHUB_OUTPUT
+          elif [ -f yarn.lock ]; then
+            echo "manager=yarn" >> $GITHUB_OUTPUT
+            echo "manager_lock_file=yarn.lock" >> $GITHUB_OUTPUT
+          else
+            echo "Couldn't locate package manager"
+            exit 1
+          fi
+          
+
       - name: Cache Node.js dependencies
         if: matrix.language == 'javascript' || matrix.language == 'typescript'
         uses: actions/cache@v4
@@ -80,18 +97,18 @@ jobs:
           path: |
             ~/.npm
             node_modules
-          key: ${{ runner.os }}-node-${{ inputs.node-version }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ inputs.node-version }}-${{ hashFiles(steps.dfm.outputs.manager_lock_file) }}
           restore-keys: |
             ${{ runner.os }}-node-${{ inputs.node-version }}-          
 
       - name: Install Node.js dependencies (npm or yarn)
         if: matrix.language == 'javascript' || matrix.language == 'typescript'
         run: |
-          if [ -f package-lock.json ]; then
-            echo "Using npm ci"
+          if [ "${{ steps.dfm.outputs.manager }}" = "npm" ]; then
+            echo "Installing with npm ci"
             npm ci
-          else
-            echo "No package-lock.json found. Using Yarn via Corepack..."
+          elif [ "${{ steps.dfm.outputs.manager }}" = "yarn" ]; then
+            echo "Installing with yarn via Corepack"
             corepack enable
             corepack prepare yarn@stable --activate
             yarn install --immutable
@@ -108,15 +125,17 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-python-${{ inputs.python-version }}-${{ hashFiles('**/python_requirements.txt') }}
-          restore-keys: |
+          key: ${{ runner.os }}-python-${{ inputs.python-version }}-${{ hashFiles('.github/requirements.txt') }}
+          estore-keys: |
             ${{ runner.os }}-python-${{ inputs.python-version }}-
 
       - name: Install Python dependencies
         if: matrix.language == 'python'
         run: |
           python -m pip install --upgrade pip
-          if [ -f python_requirements.txt ]; then pip install -r python_requirements.txt; fi
+          if [ -f .github/requirements.txt ]; then 
+            pip install -r .github/requirements.txt; 
+          fi
 
       # CodeQL Setup with caching
       - name: Cache CodeQL dependencies
