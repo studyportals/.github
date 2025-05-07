@@ -109,7 +109,7 @@ report results. You may see the following message in the [checks](./images/CodeQ
 
 To resolve this issue, run the following commands in Git Bash:
 ```bash
-gh api -H "Accept: application/vnd.github+json" ./repos/<OrganisationName>/<RepositoryName>/code-scanning/analyses --paginate |  jq '.[]|select(.category=="/language:actions") | .id ' |sed 's/\r//' | xargs -I {} gh api --method DELETE   -H "Accept: application/vnd.github+json"   -H "X-GitHub-Api-Version: 2022-11-28"   /repos/<OrganisationName>/<RepositoryName>/code-scanning/analyses/{}?confirm_delete
+gh api -H "Accept: application/vnd.github+json" ./repos/<OrganisationName>/<RepositoryName>/code-scanning/analyses --paginate | jq '.[]|select(.category=="/language:actions") | .id ' | sed 's/\r//' | xargs -I {} gh api --method DELETE -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/<OrganisationName>/<RepositoryName>/code-scanning/analyses/{}?confirm_delete
 
 gh api -H "Accept: application/vnd.github+json" ./repos/<OrganisationName>/<RepositoryName>/code-scanning/analyses --paginate |  jq '.[]|select(.category=="/language:javascript-typescript") | .id ' |sed 's/\r//' | xargs -I {} gh api --method DELETE   -H "Accept: application/vnd.github+json"   -H "X-GitHub-Api-Version: 2022-11-28"   /repos/<OrganisationName>/<RepositoryName>/code-scanning/analyses/{}?confirm_delete
 
