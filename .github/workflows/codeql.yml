@@ -1,0 +1,156 @@
+name: Reusable CodeQL Analysis
+
+on:
+  workflow_call:
+    inputs:
+      languages:
+        description: >
+          Languages to analyze, provided as a JSON array
+          (e.g., '["typescript", "python"]').
+          If your project includes both JavaScript and TypeScript,
+          specify only "typescript" to avoid duplicate analysis.
+        required: false
+        default: '["typescript"]'
+        type: string
+
+      node-version:
+        description: >
+          Node.js version to use for JavaScript/TypeScript analysis.
+          Ignored for other languages.
+        required: false
+        default: "22"
+        type: string
+
+      python-version:
+        description: >
+          Python version to use for Python analysis.
+          Ignored for other languages.
+        required: false
+        default: "3.11"
+        type: string
+
+      fail-fast:
+        description: >
+          Whether to stop all matrix jobs if one fails.
+        required: false
+        default: true
+        type: boolean
+
+      codeql-queries:
+        description: >
+          Additional CodeQL queries to run (comma-separated).
+          Example: "+security-and-quality,security-extended"
+        required: false
+        default: "+security-and-quality,security-extended"
+        type: string
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  codeql-analysis:
+    name: CodeQL
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: ${{ inputs.fail-fast }}
+      matrix:
+        language: ${{ fromJson(inputs.languages) }}
+
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}-${{ matrix.language }}
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        if: matrix.language == 'javascript' || matrix.language == 'typescript'
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+
+      - name: Detect file manager
+        if: matrix.language == 'javascript' || matrix.language == 'typescript'
+        id: dfm
+        shell: bash
+        run: |
+          if [ -f package-lock.json ]; then
+            echo "manager=npm" >> $GITHUB_OUTPUT
+            echo "manager_lock_file=package-lock.json" >> $GITHUB_OUTPUT
+          elif [ -f yarn.lock ]; then
+            echo "manager=yarn" >> $GITHUB_OUTPUT
+            echo "manager_lock_file=yarn.lock" >> $GITHUB_OUTPUT
+          else
+            echo "Couldn't locate package manager"
+            exit 1
+          fi
+
+      - name: Ensure NPM cache path exists
+        run: mkdir -p ~/.npm
+
+      - name: Cache Node.js dependencies
+        if: matrix.language == 'javascript' || matrix.language == 'typescript'
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+          key: ${{ runner.os }}-node-${{ inputs.node-version }}-${{ hashFiles(steps.dfm.outputs.manager_lock_file) }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ inputs.node-version }}-          
+
+      - name: Install Node.js dependencies (npm or yarn)
+        if: matrix.language == 'javascript' || matrix.language == 'typescript'
+        run: |
+          if [ "${{ steps.dfm.outputs.manager }}" = "npm" ]; then
+            echo "Installing with npm ci"
+            npm ci
+          elif [ "${{ steps.dfm.outputs.manager }}" = "yarn" ]; then
+            echo "Installing with yarn via Corepack"
+            corepack enable
+            yarn install --immutable
+          fi
+
+      - name: Set up Python
+        if: matrix.language == 'python'
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ inputs.python-version }}
+
+      - name: Cache Python dependencies
+        if: matrix.language == 'python'
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-python-${{ inputs.python-version }}-${{ hashFiles('.github/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-python-${{ inputs.python-version }}-
+
+      - name: Install Python dependencies
+        if: matrix.language == 'python'
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f .github/requirements.txt ]; then 
+            pip install -r .github/requirements.txt; 
+          fi
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          config-file: .github/codeql-config.yml
+          queries: ${{ inputs.codeql-queries }}
+          dependency-caching: true
+
+      - name: Autobuild
+        if: matrix.language != 'actions'
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: security
+
