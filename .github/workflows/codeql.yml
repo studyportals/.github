@@ -110,7 +110,6 @@ jobs:
           elif [ "${{ steps.dfm.outputs.manager }}" = "yarn" ]; then
             echo "Installing with yarn via Corepack"
             corepack enable
-            corepack prepare yarn@stable --activate
             yarn install --immutable
           fi
 
