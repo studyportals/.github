@@ -88,7 +88,9 @@ jobs:
             echo "Couldn't locate package manager"
             exit 1
           fi
-          
+
+      - name: Ensure NPM cache path exists
+        run: mkdir -p ~/.npm
 
       - name: Cache Node.js dependencies
         if: matrix.language == 'javascript' || matrix.language == 'typescript'
@@ -125,7 +127,7 @@ jobs:
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-python-${{ inputs.python-version }}-${{ hashFiles('.github/requirements.txt') }}
-          estore-keys: |
+          restore-keys: |
             ${{ runner.os }}-python-${{ inputs.python-version }}-
 
       - name: Install Python dependencies
