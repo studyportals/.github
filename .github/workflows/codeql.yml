@@ -98,7 +98,6 @@ jobs:
         with:
           path: |
             ~/.npm
-            node_modules
           key: ${{ runner.os }}-node-${{ inputs.node-version }}-${{ hashFiles(steps.dfm.outputs.manager_lock_file) }}
           restore-keys: |
             ${{ runner.os }}-node-${{ inputs.node-version }}-          
