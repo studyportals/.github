@@ -32,6 +32,8 @@ and code quality issues using GitHub's CodeQL. It is triggered on `push` and
 **Configuration:**
 The workflow uses a reusable GitHub Actions setup to run CodeQL analysis.
 You can customize the analysis by specifying the languages you want to analyze.
+Additional configuration options can be defined in the `codeql-config.yml` file, 
+placed in the `.github/workflows/` directory of the repository.
 
 
 ### 2. Dependency Scanning
