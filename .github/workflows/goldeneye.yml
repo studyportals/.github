@@ -40,7 +40,7 @@ jobs:
         role-to-assume: arn:aws:iam::915473064509:role/GoldenEye-Github
         role-session-name: goldeneye-federation
         aws-region: ${{ inputs.aws-region }}
-    - uses: docker://studyportals/goldeneye:destroy-pr-stacks
+    - uses: docker://studyportals/goldeneye:destroy-pr-stacks-2
       with:
         descriptor: ${{ inputs.descriptor }}
       env:
