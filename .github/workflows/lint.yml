@@ -28,7 +28,6 @@ jobs:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
-
     - id: files
       uses: studyportals/get-changed-files@main
       with:
@@ -36,43 +35,28 @@ jobs:
         format: csv
         extensions: ".php"
       if: inputs.validate-php-phpmd
-
     - uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
-
     - uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ inputs.php-version }}
       if: inputs.validate-php-phpmd
-
-    - name: Install code-style and configure
-      run: |
-        if [ -f yarn.lock ]; then
-          corepack enable
-          yarn add -D @studyportals/code-style@$(jq -r '.devDependencies."@studyportals/code-style"' package.json)
-          yarn run configure || true
-        else
-          npm ci @studyportals/code-style@$(jq -r '.devDependencies."@studyportals/code-style"' package.json) --no-save
-          npm run configure || true
-        fi
-
+    - run: npm install @studyportals/code-style@$(jq -r '.devDependencies."@studyportals/code-style"' package.json) --no-save
     - run: |
         composer config github-oauth.github.com ${{ secrets.token }}
+        npm run configure || true
         composer require --dev phpmd/phpmd:$(jq -r '."require-dev"."phpmd/phpmd"' composer.json)
       env:
         GITHUB_TOKEN: ${{ secrets.token }}
       if: inputs.validate-php-phpmd
-
     - run: |
         if [ ! -z "${{ steps.files.outputs.added_modified_renamed }}" ]; then
           echo "linting changed files..."
           ./vendor/bin/phpmd ${{ steps.files.outputs.added_modified_renamed }} text phpmd.xml
         fi
       if: inputs.validate-php-phpmd
-
     - run: cat .github/super-linter.env >> "$GITHUB_ENV"
-
     - uses: super-linter/super-linter/slim@v6
       env:
         GITHUB_TOKEN: ${{ secrets.token }}
