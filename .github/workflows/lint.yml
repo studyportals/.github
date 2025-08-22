@@ -42,7 +42,7 @@ jobs:
       with:
         php-version: ${{ inputs.php-version }}
       if: inputs.validate-php-phpmd
-    - run: npm ci @studyportals/code-style@$(jq -r '.devDependencies."@studyportals/code-style"' package.json) --no-save
+    - run: npm install @studyportals/code-style@$(jq -r '.devDependencies."@studyportals/code-style"' package.json) --no-save
     - run: |
         composer config github-oauth.github.com ${{ secrets.token }}
         npm run configure || true
