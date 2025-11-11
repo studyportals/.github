@@ -1,0 +1,37 @@
+version: 1
+goals:
+  - Enforce company-wide good practices and quality standards from Knowledge-Vault:
+      - Refer to the directory: https://github.com/studyportals/Knowledge-Vault/tree/master/good-practices-and-quality-standards
+      - Include all `.md` files under this path
+      - Apply guidance for:
+          - Infrastructure (CDK, cloud resources, IAM)
+          - Security practices
+          - Testing standards and coverage
+          - Code quality and maintainability
+  - Identify security issues in repositories:
+      - SQL Injection or other injection vulnerabilities
+      - Cross-Site Scripting or similar frontend/backend vulnerabilities
+      - IAM misconfigurations and excessive privileges
+      - Hardcoded secrets or sensitive information
+      - Debug info leaks or verbose logging
+      - CSRF or other common web vulnerabilities
+  - Validate least-privilege IAM and SDK/CDK usage:
+      - Detect overly broad policies (e.g., `"Action": "*"` or `"Resource": "*"`)
+      - Ensure SDK and CDK resources follow principle of least privilege
+      - Ensure environment variables, secrets, and credentials are handled securely
+  - Ensure all repositories have tests for infrastructure and application logic:
+      - Infrastructure stack assertions, integration/smoke tests
+      - SDK or API calls properly mocked/stubbed in unit tests
+      - Adequate unit and integration test coverage for application code
+  - Promote secure, maintainable, and documented coding conventions:
+      - Follow naming, modularity, and architecture patterns from Knowledge-Vault
+      - Replace deprecated functions, libraries, or APIs
+      - Apply structured error handling and logging
+      - Centralize validation, escaping, and security checks
+      - Detect and refactor **duplicated or copy-pasted code**
+        - Encourage reuse via shared functions, modules, or libraries
+        - Highlight repeated patterns that may indicate missing abstractions
+preferences:
+  tone: professional
+  response_format: markdown
+  level_of_detail: high
