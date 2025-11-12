@@ -155,7 +155,33 @@ ensures that pull requests are well-structured and provide all necessary informa
 This template ensures that every pull request provides clarity on what changes are
 being made and why, helping maintain consistency and improving communication across your team.
 
+## GitHub Copilot Instructions
 
+This repository defines the **organization-wide GitHub Copilot review configuration**, 
+ensuring that all AI-assisted code reviews across Studyportals repositories are **consistent, secure, and aligned with company-wide engineering standards**.
+
+The configuration draws from the [Knowledge Vault – Good Practices and Quality Standards](https://github.com/studyportals/Knowledge-Vault/tree/master/good-practices-and-quality-standards), and enforces guidelines in the following areas:
+
+- **Code Quality and Security** — Enforces standards for readability, maintainability, and secure coding.
+- **Dependency and IAM Audits** — Validates dependency health and adherence to least-privilege principles.
+- **Secure Coding Practices** — Covers PHP, TypeScript, AWS SDK/CDK, and cloud infrastructure.
+- **Testing and Validation** — Ensures adequate test coverage, reliability, and adherence to company testing standards.
+- **Architecture and Conventions** — Promotes consistent naming, documentation, and structural design patterns across all projects.
+
+By defining these standards centrally, Copilot provides reviewers and contributors with **automated, 
+organization-aligned feedback**, helping to maintain high code quality and security across all repositories.
+
+> **Note:**
+> - By default, Copilot reviews only pull requests marked as **“Ready for Review.”**  
+> - To enable Copilot reviews for **draft pull requests**, configure it in the rulesets of the repository’s 
+ Copilot settings under **“Review draft pull requests.”**
+> - Copilot reviews each pull request **only once**, unless explicitly configured to re-review after every push.
+> - If a repository is configured to **automatically request a Copilot review** for all new pull requests, 
+ the **premium review usage** is applied to the **quota of the pull request author**.
+> - If the pull request is created by **GitHub Actions** or a **bot**, the usage is applied to the user 
+ who triggered the workflow (if identifiable) or to the **designated billing owner**.
+> - When your **monthly quota** of premium Copilot review requests is reached, further automated reviews 
+will be unavailable until the quota resets — unless your plan is **upgraded** or additional premium requests are **enabled**.
 
 ## Contributing
 
