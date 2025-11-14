@@ -161,3 +161,9 @@ jobs:
           category: security
           fail-on: ${{ inputs.analysis_fail_level }}
 
+      - name: Fail workflow if high alerts found
+        if: steps.codeql.outcome == 'failure'
+        run: |
+          echo "High severity alerts found — failing workflow"
+          exit 1    
+
