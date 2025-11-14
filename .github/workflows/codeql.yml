@@ -3,6 +3,12 @@ name: Reusable CodeQL Analysis
 on:
   workflow_call:
     inputs:
+      fail-on:
+        description: "Severity to fail on (high, medium, all)"
+        required: false
+        default: "high"
+        type: string
+
       languages:
         description: >
           Languages to analyze, provided as a JSON array
@@ -153,5 +159,5 @@ jobs:
         uses: github/codeql-action/analyze@v4
         with:
           category: security
-          fail-on: high
+          fail-on: ${{ inputs.fail-on }}
 
