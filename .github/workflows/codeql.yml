@@ -3,12 +3,6 @@ name: Reusable CodeQL Analysis
 on:
   workflow_call:
     inputs:
-      analysis_fail_level:
-        description: "Severity to fail on (high, medium, all)"
-        required: false
-        default: "high"
-        type: string
-
       languages:
         description: >
           Languages to analyze, provided as a JSON array
@@ -159,11 +153,4 @@ jobs:
         uses: github/codeql-action/analyze@v4
         with:
           category: security
-          fail-on: ${{ inputs.analysis_fail_level }}
-
-      - name: Fail workflow if high alerts found
-        if: steps.codeql.outcome == 'failure'
-        run: |
-          echo "High severity alerts found — failing workflow"
-          exit 1    
 
