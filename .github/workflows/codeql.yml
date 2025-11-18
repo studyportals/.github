@@ -104,6 +104,9 @@ jobs:
 
       - name: Install Node.js dependencies (npm or yarn)
         if: matrix.language == 'javascript' || matrix.language == 'typescript'
+        env:
+          CYPRESS_INSTALL_BINARY: 0
+          npm_config_ignore_scripts: true
         run: |
           if [ "${{ steps.dfm.outputs.manager }}" = "npm" ]; then
             echo "Installing with npm ci"
