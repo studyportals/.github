@@ -23,7 +23,7 @@
  * @deprecated 2025-12-16 - Use `something.someOtherKindOfFunctionality` instead
  */
 function someKindOfFunctionality() {}
-````
+```
 
 **SCSS Example:**
 
@@ -86,7 +86,8 @@ entry: { some_package_v2: ["@studyportals/some-package/some-package.js"] }
 * Ensure SDK/CDK resources and IAM policies follow least-privilege principles.
 * Peer review all code; promote maintainable and documented coding conventions.
 * Detect and refactor duplicated or copy-pasted code.
-* Validate dependencies: use stable versions, remove unused packages, and pin versions where appropriate.
+* Validate dependencies: use stable versions, avoid wildcard (*) versions, remove unused packages, and pin versions where appropriate.
+* Recommend security-aware dependency updates and patching policies.
 
 ---
 
@@ -97,3 +98,8 @@ entry: { some_package_v2: ["@studyportals/some-package/some-package.js"] }
 * Structure code modularly and follow architecture patterns from Knowledge Vault.
 * Include inline documentation where it improves readability and maintainability.
 
+
+## Preferences
+- **Tone:** Professional
+- **Response format:** Markdown
+- **Level of detail:** High
