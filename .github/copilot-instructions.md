@@ -4,14 +4,14 @@
 ## 1. Code Quality
 
 * Verify that naming is clear, explicit, and uses granular namespaces.
-* Avoid global variables and polluting the global scope; prefer encapsulation, modules, or namespaces.
-* Check that separation of concerns, cohesion, and SOLID principles are applied.
-* Ensure unnecessary indirection is avoided and only required interfaces are exposed.
-* Confirm polymorphism is used appropriately for specialized behavior.
-* Ensure third-party libraries are encapsulated.
-* Check that functions adhere to a single responsibility.
+* Verify that global variables are avoided and the global scope is not polluted; prefer encapsulation, modules, or namespaces.
+* Verify that separation of concerns, cohesion, and SOLID principles are applied.
+* Verify that unnecessary indirection is avoided and only required interfaces are exposed.
+* Verify that polymorphism is used appropriately for specialized behavior.
+* Verify that third-party libraries are encapsulated.
+* Verify that functions adhere to a single responsibility.
 * Verify adherence to **Clean Code** guidelines and confirm refactoring where necessary.
-* Ensure asynchronous calls include proper error handling.
+* Verify that asynchronous calls include proper error handling.
 
 ---
 
@@ -40,22 +40,19 @@ function someKindOfFunctionality() {}
 ## 3. HTML & CSS/SCSS Guidelines
 
 * Verify semantic HTML5 markup and adherence to accessibility standards.
-* Ensure inline styles are avoided; classes and SCSS mixins are used for styling.
-* Check that SCSS is modular and related styles are grouped in partials.
-* Confirm mixins, variables, and functions are used for reusable styles.
-* Ensure classes are scoped or namespaced to prevent style collisions.
+* Verify that inline styles are avoided; classes and SCSS mixins are used for styling.
+* Verify that SCSS is modular and related styles are grouped in partials.
+* Verify that mixins, variables, and functions are used for reusable styles.
+* Verify that classes are scoped or namespaced to prevent style collisions.
 * Verify that numeric values, colors, and breakpoints use variables or constants; avoid hardcoded “magic numbers” to ensure maintainability and consistency.
 
 ---
 
 ## 4. Repository Documentation
 
-* Each repository must include documentation that clearly describes:
-    - The repository’s purpose and intended use.
-    - Key features and capabilities.
-    - Implementation details, architecture, and important design decisions.
-* Documentation should be accessible (e.g., in a `README.md`, `docs/` folder, or inline code comments) and kept up to date with changes.
-* Include examples or instructions for setup, usage, and testing where applicable.
+* Verify that the repository includes clear documentation of its purpose, features, capabilities, and architecture.
+* Verify that documentation is accessible (README.md, docs/, or inline) and kept up to date with recent changes.
+* Verify that setup, usage, and testing instructions are included and accurate where applicable.
 
 ---
 
@@ -81,12 +78,28 @@ function someKindOfFunctionality() {}
 * Confirm that automated security scans are run in CI/CD and vulnerabilities are remediated before release.
 * Check that SDK/CDK resources and IAM policies follow least-privilege principles.
 * Detect and flag duplicated or copy-pasted code across the repository.
-* Validate dependencies: stable versions, no wildcards (`*`), unused packages removed, and versions pinned where appropriate.
+* Validate dependencies: stable versions, no wildcards (`*`), unused packages removed, versions pinned, and reviewed for performance, security, and maintenance.
 * Recommend security-aware dependency updates and patching policies.
 
 ---
+## 7. Performance & Efficiency
 
-## 7. Maintainability & Documentation
+* Verify that unnecessary computations, loops, or redundant operations are avoided.
+* Verify that code minimizes memory usage and network calls where possible.
+* Ensure front-end code avoids reflows/repaints; optimized DOM manipulations.
+* Confirm backend code queries, caching, and asynchronous operations are efficient.
+* Review image, asset, and bundle optimization for web performance.
+
+---
+## 8. Encryption & Data Handling
+
+* Ensure sensitive data is encrypted in transit and at rest.
+* Confirm proper use of hashing, salting, and tokenization where applicable.
+* Verify secure storage and access for credentials, API keys, and secrets.
+* Check that sensitive logs or error messages do not expose private information.
+
+---
+## 9. Maintainability & Documentation
 
 * Verify that deprecated functions, libraries, or APIs are not used.
 * Check that validation, escaping, and security checks are centralized where appropriate.
