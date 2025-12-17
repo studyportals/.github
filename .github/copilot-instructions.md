@@ -1,5 +1,3 @@
----
-
 # Copilot Reviewer Quick Checklist – Studyportals Organisation
 
 ### 1. Code Quality
@@ -94,6 +92,6 @@
 
 ---
 
-✅ **Reviewer Guidelines**: Professional tone, Markdown responses, high level of detail.
+**Reviewer Guidelines**: Professional tone, Markdown responses, high level of detail.
 
 ---
