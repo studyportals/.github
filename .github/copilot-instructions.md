@@ -11,14 +11,12 @@
 * [ ] Asynchronous calls have proper error handling.
 
 ---
-
 ### 2. Deprecating Code
 
 * [ ] Deprecated code includes `@deprecated` comment with date, reason, and replacement.
 * [ ] SCSS mixins or functions include deprecation warnings.
 
 ---
-
 ### 3. HTML & CSS/SCSS
 
 * [ ] Semantic HTML5 and accessibility standards followed.
@@ -29,7 +27,6 @@
 * [ ] Numeric values, colors, breakpoints use variables/constants; no magic numbers.
 
 ---
-
 ### 4. Repository Documentation
 
 * [ ] Repository purpose, features, capabilities, and architecture documented.
@@ -37,7 +34,6 @@
 * [ ] Setup, usage, and testing instructions are included and accurate.
 
 ---
-
 ### 5. Testing
 
 * [ ] Code covered by unit, integration, and end-to-end tests.
@@ -47,7 +43,6 @@
 * [ ] Code is testable and maintainable.
 
 ---
-
 ### 6. Security
 
 * [ ] Follows OWASP guidance and secure coding standards.
@@ -63,7 +58,6 @@
 * [ ] Dependencies stable, pinned, and reviewed for performance/security/maintenance.
 
 ---
-
 ### 7. Performance & Efficiency
 
 * [ ] No unnecessary computations, loops, or redundant operations.
@@ -73,7 +67,6 @@
 * [ ] Images, assets, bundles optimized for web performance.
 
 ---
-
 ### 8. Encryption & Data Handling
 
 * [ ] Sensitive data encrypted in transit and at rest.
@@ -82,7 +75,6 @@
 * [ ] Sensitive logs/error messages do not expose private info.
 
 ---
-
 ### 9. Maintainability & Documentation
 
 * [ ] Deprecated functions, libraries, APIs not used.
@@ -91,7 +83,45 @@
 * [ ] Inline documentation included where it improves readability and maintainability.
 
 ---
+### 10. **Severity Classification for All Findings**
 
-**Reviewer Guidelines**: Professional tone, Markdown responses, high level of detail.
+| Severity     | Description                                                                                                                                      |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Critical** | Security vulnerabilities (RCE, SQLi, auth bypass), data loss, system unavailability, major misconfigurations, breaks core business requirements. |
+| **High**     | Major bugs, runtime exceptions, performance bottlenecks, maintainability or architectural risks, CI/CD reliability issues.                       |
+| **Medium**   | Potential future bugs, moderate inefficiencies, readability concerns, inconsistent patterns, missing non-critical tests.                         |
+| **Low**      | Minor style, formatting, or documentation issues, cosmetic improvements, optional refactoring opportunities.                                     |
 
+---
+### 11. **Expected Review Output Format**
+
+Use Markdown structured table for all findings:
+
+### **Structured Findings Table**
+
+```markdown
+| Issue | Severity | Explanation | Recommended Fix |
+|-------|----------|-------------|-----------------|
+```
+* Provide actionable, implementation-specific suggestions.
+* Include code snippets or examples where relevant.
+* Highlight redundant code patterns.
+* Flag deprecated packages and suggest alternatives.
+* Audit dependency versions and note concerns.
+* Explain reasoning briefly so developers understand the why, not just the what.
+
+---
+### 12. Generic Reviewer Instructions
+
+* For all checklist items, Copilot or reviewers must:
+* Provide actionable, implementation-specific code snippets for any issue detected.
+* Suggest alternative libraries, functions, or patterns if current usage is deprecated or suboptimal.
+* Include inline examples to illustrate recommended fixes, refactorings, or improvements.
+* Explain reasoning briefly, so developers understand the why, not just the what.
+
+---
+### 13. Reviewer Guidelines Preferences
+- **Tone:** Professional
+- **Response format:** Markdown
+- **Level of detail:** High
 ---
