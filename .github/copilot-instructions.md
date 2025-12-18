@@ -92,6 +92,12 @@
 * Explain reasoning briefly, so developers understand the why, not just the what.
 
 ---
+## Review Scope (Mandatory)
+* Review only files changed in this pull request
+* Do NOT perform full-repository audits
+* Flag issues only when they are directly observable in the diff
+
+---
 ### 11. Reviewer Guidelines Preferences
 * **Tone:** Professional
 * **Response format:** Markdown
