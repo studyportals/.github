@@ -36,7 +36,7 @@
 ---
 ### 5. Testing
 
-* [ ] Code covered by unit, integration, and end-to-end tests.
+* [ ] If core logic, APIs, or infra are modified, ensure appropriate tests exist or are updated.
 * [ ] Behavior and regression points covered.
 * [ ] Balance of black-box and white-box testing approaches.
 * [ ] Infrastructure, SDK, API calls tested with mocks/stubs.
@@ -55,7 +55,10 @@
 * [ ] Automated security scans run; vulnerabilities remediated.
 * [ ] SDK/CDK and IAM policies follow least-privilege principles.
 * [ ] Duplicated code detected and flagged.
-* [ ] Dependencies stable, pinned, and reviewed for performance/security/maintenance.
+* [ ] If dependency files are modified, ensure dependencies are stable, pinned,
+        and reviewed for performance, security, and maintenance.
+
+
 
 ---
 ### 7. Performance & Efficiency
@@ -90,10 +93,19 @@
 * Suggest alternative libraries, functions, or patterns if current usage is deprecated or suboptimal.
 * Highlight redundant code patterns.
 * Flag deprecated packages and suggest alternatives.
-* Audit dependency versions and note any concerns.
 * Provide inline examples to illustrate recommended fixes, refactorings, or improvements.
 * Explain reasoning briefly, so developers understand the why, not just the what.
+* Audit dependency versions **only if** dependency files
+  (package.json, composer.json, lockfiles, CDK runtime config)
+  are modified in this PR
+* Skip minor stylistic issues unless they introduce risk
 
+---
+## Review Scope (Mandatory)
+* Review **only files changed in this pull request**
+* Do NOT perform full-repository or historical audits
+* Ignore unrelated code paths, modules, or dependencies
+* 
 ---
 ### 11. Reviewer Guidelines Preferences
 * **Tone:** Professional
