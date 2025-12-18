@@ -1,61 +1,81 @@
-# Code Review and Security Audit Instructions — Version 1
+# Copilot Reviewer Quick Checklist – Studyportals Organisation
 
-## Goals
+### 1. Code Quality
 
-### 1. Enforce Company-Wide Good Practices and Quality Standards
-Refer to the [Knowledge-Vault repository](https://github.com/studyportals/Knowledge-Vault/tree/master/good-practices-and-quality-standards).
+* [ ] Naming is clear, explicit, and uses granular namespaces.
+* [ ] No global variables; global scope not polluted.
+* [ ] Separation of concerns, cohesion, and SOLID principles applied.
+* [ ] Functions follow single responsibility; unnecessary indirection avoided.
+* [ ] Polymorphism is used where appropriate.
+* [ ] Third-party libraries are encapsulated.
+* [ ] Asynchronous calls have proper error handling.
+* [ ] Duplicated code detected and flagged.
 
-Include all `.md` files under this path and apply guidance for:
-- **Infrastructure:** CDK, cloud resources, IAM
-- **Security practices**
-- **Testing standards and coverage**
-- **Code quality and maintainability**
+---
+### 2. HTML & CSS/SCSS
 
+* [ ] Semantic HTML5 and accessibility standards followed.
+* [ ] No inline styles; classes and SCSS mixins used.
+* [ ] SCSS is modular; related styles grouped in partials.
+* [ ] Reusable styles use mixins, variables, or functions.
+* [ ] Classes are scoped/namespaced.
+* [ ] Numeric values, colors, breakpoints use variables/constants; no magic numbers.
 
-### 2. Identify Security Issues in Repositories
-Focus on detecting and mitigating:
-- **SQL Injection** or other injection vulnerabilities
-- **Cross-Site Scripting (XSS)** or similar frontend/backend vulnerabilities
-- **IAM misconfigurations** and excessive privileges
-- **Hardcoded secrets** or sensitive information
-- **Debug information leaks** or verbose logging
-- **CSRF** or other common web vulnerabilities
+---
+### 3. Repository Documentation
 
+* [ ] Repository purpose, features, capabilities, and architecture documented.
+* [ ] Documentation accessible (README.md, docs/, or inline) and up to date.
+* [ ] Setup, usage, and testing instructions are included and accurate.
 
-### 3. Validate Least-Privilege IAM and SDK/CDK Usage
-- Detect overly broad policies (e.g., `"Action": "*"` or `"Resource": "*"`).
-- Ensure SDK and CDK resources follow the **principle of least privilege**.
-- Ensure environment variables, secrets, and credentials are handled securely.
+---
+### 4. Testing
 
+* [ ] Code covered by unit, integration, and end-to-end tests.
+* [ ] Behavior and regression points covered.
+* [ ] Balance of black-box and white-box testing approaches.
+* [ ] Infrastructure, SDK, API calls tested with mocks/stubs.
+* [ ] Code is testable and maintainable.
 
-### 4. Ensure All Repositories Have Adequate Tests
-Testing should cover both infrastructure and application logic:
-- Infrastructure stack assertions, integration, and unit tests.
-- SDK or API calls properly mocked/stubbed in unit tests.
-- Adequate **unit** and **integration test coverage** for application code.
+---
+### 5. Security
 
+* [ ] Follows OWASP guidance and secure coding standards.
+* [ ] No SQL Injection, XSS, CSRF vulnerabilities.
+* [ ] No hardcoded secrets, credentials, or API keys; all sensitive information is securely stored and accessed.
+* [ ] Sensitive data anonymized or tokenized when needed.
+* [ ] Error handling does not leak sensitive information.
+* [ ] Least-privilege access enforced.
+* [ ] Automated security scans run; vulnerabilities remediated.
+* [ ] SDK/CDK and IAM policies follow least-privilege principles.
+* [ ] Dependencies stable, pinned, and reviewed for performance/security/maintenance.
 
-### 5. Promote Secure, Maintainable, and Documented Coding Conventions
-- Follow naming, modularity, and architecture patterns from **Knowledge-Vault**.
-- Replace **deprecated functions, libraries, or APIs**.
-- Apply **structured error handling** and logging.
-- Centralize validation, escaping, and security checks.
-- Detect and refactor **duplicated or copy-pasted code**:
-    - Encourage reuse via shared functions, modules, or libraries.
-    - Highlight repeated patterns that may indicate missing abstractions.
+---
+### 6. Performance & Efficiency
 
-### 6. Validate Dependencies and Runtime Environments
-- Ensure all **packages/dependencies** use **stable versions** (avoid alpha/beta unless justified).
-- Identify and flag **unnecessary or unused packages**.
-- Validate that **runtime or engine versions** (Node.js, Python, Java, etc.) match the organization’s approved standards.
-- Ensure manifest files (`package.json`, `requirements.txt`, `pom.xml`, etc.) follow best practices:
-    - Pin versions where appropriate.
-    - Avoid wildcard (`*`) version specifications unless required.
-    - Detect conflicting versions across dependencies.
-- Recommend **security-aware dependency updates** and patching policies.
+* [ ] No unnecessary computations, loops, or redundant operations.
+* [ ] Memory usage and network calls minimized.
+* [ ] Front-end optimized (avoid reflows/repaints, DOM optimized).
+* [ ] Backend queries, caching, async operations efficient.
+* [ ] Images, assets, bundles optimized for web performance.
 
+---
+### 7. Encryption & Data Handling
 
-## Preferences
-- **Tone:** Professional
-- **Response format:** Markdown
-- **Level of detail:** High  
+* [ ] Data encrypted at rest and in transit.
+* [ ] Proper hashing, salting, and tokenization used.
+* [ ] Sensitive logs/error messages do not expose private info.
+
+---
+### 8. Maintainability & Documentation
+
+* [ ] Deprecated functions, libraries, APIs not used.
+* [ ] Validation, escaping, and security checks centralized.
+* [ ] Code modular.
+* [ ] Deprecated code includes `@deprecated` comment with date, reason, and replacement.
+* [ ] SCSS mixins or functions include deprecation warnings.
+
+---
+**Reviewer Guidelines**: Professional tone, Markdown responses, high level of detail.
+
+---
