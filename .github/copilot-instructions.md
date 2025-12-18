@@ -11,12 +11,14 @@
 * [ ] Asynchronous calls have proper error handling.
 
 ---
+
 ### 2. Deprecating Code
 
 * [ ] Deprecated code includes `@deprecated` comment with date, reason, and replacement.
 * [ ] SCSS mixins or functions include deprecation warnings.
 
 ---
+
 ### 3. HTML & CSS/SCSS
 
 * [ ] Semantic HTML5 and accessibility standards followed.
@@ -27,6 +29,7 @@
 * [ ] Numeric values, colors, breakpoints use variables/constants; no magic numbers.
 
 ---
+
 ### 4. Repository Documentation
 
 * [ ] Repository purpose, features, capabilities, and architecture documented.
@@ -34,15 +37,17 @@
 * [ ] Setup, usage, and testing instructions are included and accurate.
 
 ---
+
 ### 5. Testing
 
-* [ ] If core logic, APIs, or infra are modified, ensure appropriate tests exist or are updated.
+* [ ] Code covered by unit, integration, and end-to-end tests.
 * [ ] Behavior and regression points covered.
 * [ ] Balance of black-box and white-box testing approaches.
 * [ ] Infrastructure, SDK, API calls tested with mocks/stubs.
 * [ ] Code is testable and maintainable.
 
 ---
+
 ### 6. Security
 
 * [ ] Follows OWASP guidance and secure coding standards.
@@ -55,12 +60,10 @@
 * [ ] Automated security scans run; vulnerabilities remediated.
 * [ ] SDK/CDK and IAM policies follow least-privilege principles.
 * [ ] Duplicated code detected and flagged.
-* [ ] If dependency files are modified, ensure dependencies are stable, pinned,
-        and reviewed for performance, security, and maintenance.
-
-
+* [ ] Dependencies stable, pinned, and reviewed for performance/security/maintenance.
 
 ---
+
 ### 7. Performance & Efficiency
 
 * [ ] No unnecessary computations, loops, or redundant operations.
@@ -70,6 +73,7 @@
 * [ ] Images, assets, bundles optimized for web performance.
 
 ---
+
 ### 8. Encryption & Data Handling
 
 * [ ] Sensitive data encrypted in transit and at rest.
@@ -78,6 +82,7 @@
 * [ ] Sensitive logs/error messages do not expose private info.
 
 ---
+
 ### 9. Maintainability & Documentation
 
 * [ ] Deprecated functions, libraries, APIs not used.
@@ -86,20 +91,7 @@
 * [ ] Inline documentation included where it improves readability and maintainability.
 
 ---
-### 10. Review Output & Generic Instructions
 
-* Include code snippets or examples for any detected issues.
-* Explain reasoning briefly, so developers understand the why, not just the what.
+**Reviewer Guidelines**: Professional tone, Markdown responses, high level of detail.
 
----
-## Review Scope (Mandatory)
-* Review only files changed in this pull request
-* Do NOT perform full-repository audits
-* Flag issues only when they are directly observable in the diff
-
----
-### 11. Reviewer Guidelines Preferences
-* **Tone:** Professional
-* **Response format:** Markdown
-* **Level of detail:** High
 ---
