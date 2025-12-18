@@ -88,24 +88,9 @@
 ---
 ### 10. Review Output & Generic Instructions
 
-* All findings must be actionable and implementation-specific.
 * Include code snippets or examples for any detected issues.
-* Suggest alternative libraries, functions, or patterns if current usage is deprecated or suboptimal.
-* Highlight redundant code patterns.
-* Flag deprecated packages and suggest alternatives.
-* Provide inline examples to illustrate recommended fixes, refactorings, or improvements.
 * Explain reasoning briefly, so developers understand the why, not just the what.
-* Audit dependency versions **only if** dependency files
-  (package.json, composer.json, lockfiles, CDK runtime config)
-  are modified in this PR
-* Skip minor stylistic issues unless they introduce risk
 
----
-## Review Scope (Mandatory)
-* Review **only files changed in this pull request**
-* Do NOT perform full-repository or historical audits
-* Ignore unrelated code paths, modules, or dependencies
-* 
 ---
 ### 11. Reviewer Guidelines Preferences
 * **Tone:** Professional
