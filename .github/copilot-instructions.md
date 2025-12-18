@@ -94,48 +94,8 @@
 * Provide inline examples to illustrate recommended fixes, refactorings, or improvements.
 * Explain reasoning briefly, so developers understand the why, not just the what.
 
-## 11. Severity Classification for All Findings*
-
-For every finding, Copilot **must classify findings into one of four severity categories**.
-Use the following definitions consistently:
-
-### **Critical**
-
-Issues that can:
-
-* Produce security vulnerabilities (RCE, SQLi, auth bypass, token exposure, secret leakage).
-* Cause data loss, corruption, or system unavailability.
-* Introduce major misconfigurations in AWS IAM, networking, or encryption.
-* Break core business requirements.
-
-### **High**
-
-Issues that:
-
-* Cause incorrect functionality, major bugs, or runtime exceptions.
-* Introduce significant performance bottlenecks.
-* Create substantial maintainability or architectural risks.
-* Reduce reliability of CI/CD or infrastructure deployments.
-
-### **Medium**
-
-Issues that:
-
-* May lead to future bugs but are not immediately breaking.
-* Represent moderate inefficiencies or readability concerns.
-* Indicate inconsistent patterns or missing non-critical tests.
-* Relate to poor abstractions, unclear naming, or structural issues.
-
-### **Low**
-
-Issues that:
-
-* Are minor style, formatting, or documentation shortcomings.
-* Represent non-urgent improvements or optional refactoring opportunities.
-* Involve minor redundancy or cosmetic structure issues.
-
 ---
-### 12. Reviewer Guidelines Preferences
+### 11. Reviewer Guidelines Preferences
 * **Tone:** Professional
 * **Response format:** Markdown
 * **Level of detail:** High
