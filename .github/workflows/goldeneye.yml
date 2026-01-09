@@ -9,7 +9,7 @@ on:
         type: string
       descriptor:
         required: false
-        default: 'goldeneye.json'
+        default: "goldeneye.json"
         type: string
       tag:
         required: false
@@ -33,16 +33,15 @@ jobs:
     name: Deploy
     timeout-minutes: 30
     steps:
-    - uses: actions/checkout@v4
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        role-to-assume: arn:aws:iam::915473064509:role/GoldenEye-Github
-        role-session-name: goldeneye-federation
-        aws-region: ${{ inputs.aws-region }}
-    - uses: docker://studyportals/goldeneye:latest
-      with:
-        descriptor: ${{ inputs.descriptor }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+      - uses: actions/checkout@v4
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::915473064509:role/GoldenEye-Github
+          role-session-name: goldeneye-federation
+          aws-region: ${{ inputs.aws-region }}
+      - uses: docker://studyportals/goldeneye:docker-v4.5
+        with:
+          descriptor: ${{ inputs.descriptor }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
