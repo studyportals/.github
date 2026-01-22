@@ -31,7 +31,7 @@ jobs:
     - id: files
       uses: studyportals/get-changed-files@main
       with:
-        token: ${{ secrets.token }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         format: csv
         extensions: ".php"
       if: inputs.validate-php-phpmd
