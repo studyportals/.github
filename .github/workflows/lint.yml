@@ -31,7 +31,7 @@ jobs:
     - id: files
       uses: studyportals/get-changed-files@main
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.token }}
         format: csv
         extensions: ".php"
       if: inputs.validate-php-phpmd
@@ -46,11 +46,12 @@ jobs:
       env:
         CYPRESS_INSTALL_BINARY: 0
     - run: |
+        git config --global url."https://oauth2:${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
         composer config github-oauth.github.com $GITHUB_TOKEN
         npm run configure || true
         composer require --dev phpmd/phpmd:$(jq -r '."require-dev"."phpmd/phpmd"' composer.json)
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.token }}
       if: inputs.validate-php-phpmd
     - run: |
         if [ ! -z "${{ steps.files.outputs.added_modified_renamed }}" ]; then
