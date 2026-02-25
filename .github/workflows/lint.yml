@@ -51,13 +51,14 @@ jobs:
 
       - run: cat .github/super-linter.env >> "$GITHUB_ENV"
 
+      - run: |
+          composer config github-oauth.github.com ${{ secrets.token }}
+
       - uses: super-linter/super-linter/slim@v8.5.0
         env:
           GITHUB_TOKEN: ${{ secrets.token }}
 
       - run: |
-          composer config github-oauth.github.com ${{ secrets.token }}
-          npm run configure || true
           composer require --dev phpmd/phpmd:$(jq -r '."require-dev"."phpmd/phpmd"' composer.json)
         env:
           GITHUB_TOKEN: ${{ secrets.token }}
