@@ -15,6 +15,10 @@ on:
         required: false
         default: false
         type: boolean
+      validate-php-phpstan:
+        required: false
+        default: false
+        type: boolean
     secrets:
       token:
         required: true
@@ -65,8 +69,11 @@ jobs:
         if: inputs.validate-php-phpmd
 
       - run: |
-          if [ ! -z "${{ steps.files.outputs.added_modified_renamed }}" ]; then
-            echo "linting changed files..."
-            /github/workspace/vendor/bin/phpmd ${{ steps.files.outputs.added_modified_renamed }} text phpmd.xml
-          fi
+          echo "running phpmd..."
+          composer run phpmd
         if: inputs.validate-php-phpmd
+
+      - run: |
+          echo "running phpstan..."
+          composer run phpstan
+        if: inputs.validate-php-phpstan
