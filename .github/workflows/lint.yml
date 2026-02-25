@@ -63,10 +63,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.token }}
 
       - run: |
-          composer require --dev phpmd/phpmd:$(jq -r '."require-dev"."phpmd/phpmd"' composer.json)
-        env:
-          GITHUB_TOKEN: ${{ secrets.token }}
-        if: inputs.validate-php-phpmd
+          composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
+        if: inputs.validate-php-phpmd || inputs.validate-php-phpstan
 
       - run: |
           echo "running phpmd..."
