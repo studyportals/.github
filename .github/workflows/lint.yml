@@ -67,6 +67,6 @@ jobs:
       - run: |
           if [ ! -z "${{ steps.files.outputs.added_modified_renamed }}" ]; then
             echo "linting changed files..."
-            ./vendor/bin/phpmd ${{ steps.files.outputs.added_modified_renamed }} text phpmd.xml
+            /github/workspace/vendor/bin/phpmd ${{ steps.files.outputs.added_modified_renamed }} text phpmd.xml
           fi
         if: inputs.validate-php-phpmd
