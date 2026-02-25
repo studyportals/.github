@@ -63,15 +63,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.token }}
 
       - run: |
-          composer install --no-progress --prefer-dist
+          composer install --no-progress --dev
         if: inputs.validate-php-phpmd || inputs.validate-php-phpstan
 
       - run: |
-          echo "running phpmd..."
           composer run phpmd
         if: inputs.validate-php-phpmd
 
       - run: |
-          echo "running phpstan..."
           composer run phpstan
         if: inputs.validate-php-phpstan
