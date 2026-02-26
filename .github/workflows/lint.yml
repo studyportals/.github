@@ -15,10 +15,6 @@ on:
         required: false
         default: false
         type: boolean
-      validate-php-phpstan:
-        required: false
-        default: false
-        type: boolean
     secrets:
       token:
         required: true
@@ -31,14 +27,6 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-
-      - id: files
-        uses: studyportals/get-changed-files@main
-        with:
-          token: ${{ secrets.token }}
-          format: csv
-          extensions: ".php"
-        if: inputs.validate-php-phpmd
 
       - uses: actions/setup-node@v4
         with:
@@ -65,7 +53,3 @@ jobs:
       - run: |
           composer run phpmd
         if: inputs.validate-php-phpmd
-
-      - run: |
-          composer run phpstan
-        if: inputs.validate-php-phpstan
