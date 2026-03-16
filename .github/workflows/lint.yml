@@ -52,8 +52,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.token }}
 
       - run: |
-          if [ ! -d "/github/workspace/vendor/phpmd/phpmd" ]; then
-            composer require --dev phpmd/phpmd:$(jq -r '."require-dev"."phpmd/phpmd"' composer.json)
+          if [ ! -x "${GITHUB_WORKSPACE}/vendor/bin/phpmd" ]; then
+            composer install
           fi
           composer run phpmd
         if: inputs.validate-php-phpmd
