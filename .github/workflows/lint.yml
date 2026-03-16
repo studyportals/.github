@@ -52,7 +52,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.token }}
 
       - run: |
-          if [ ! -f "/github/workspace/vendor/bin/phpmd" ]; then
+          if [ ! -d "/github/workspace/vendor/phpmd/phpmd" ]; then
             composer require --dev phpmd/phpmd:$(jq -r '."require-dev"."phpmd/phpmd"' composer.json)
           fi
           composer run phpmd
