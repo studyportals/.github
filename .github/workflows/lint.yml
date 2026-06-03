@@ -63,14 +63,14 @@ jobs:
           if [ -n "${{ steps.files.outputs.added_modified_renamed }}" ]; then
             echo "linting changed files..."
 
-            if [ -f phpmd-baseline.xml ]; then
+            if [ -f phpmd.baseline.xml ]; then
               echo "Using PHPMD baseline"
 
               ./vendor/bin/phpmd \
                 "${{ steps.files.outputs.added_modified_renamed }}" \
                 text \
                 phpmd.xml \
-                --baseline-file phpmd-baseline.xml
+                --baseline-file phpmd.baseline.xml
             else
               echo "No PHPMD baseline found"
 
