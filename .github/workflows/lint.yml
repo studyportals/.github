@@ -5,11 +5,11 @@ on:
     inputs:
       node-version:
         required: false
-        default: "20"
+        default: "24"
         type: string
       php-version:
         required: false
-        default: "7.4"
+        default: "8.5"
         type: string
       validate-php-phpmd:
         required: false
@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -37,7 +37,7 @@ jobs:
           format: csv
           extensions: ".php"
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ inputs.node-version }}
 
@@ -84,7 +84,7 @@ jobs:
 
       - run: cat .github/super-linter.env >> "$GITHUB_ENV"
 
-      - uses: super-linter/super-linter/slim@v6.8.0
+      - uses: super-linter/super-linter/slim@v8.7.0
         env:
           GITHUB_TOKEN: ${{ secrets.token }}
           PHP_PHPSTAN_BOOTSTRAP: "./vendor/autoload.php"
